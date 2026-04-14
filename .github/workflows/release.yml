@@ -1,0 +1,76 @@
+name: Release SslManager
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build_cli:
+    name: Build CLI (Standalone)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            rids: linux-x64
+            ext: ""
+          - os: windows-latest
+            rids: win-x64
+            ext: ".exe"
+          - os: macos-latest
+            rids: osx-x64
+            ext: ""
+          - os: macos-latest
+            rids: osx-arm64
+            ext: ""
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish CLI Standalone
+        run: dotnet publish SslManager.Cli/SslManager.Cli.csproj -c Release -r ${{ matrix.rids }} --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish/cli
+
+      - name: Zip Artifact
+        run: |
+          cd ./publish/cli
+          zip -r ../../SslManager-Cli-${{ matrix.rids }}.zip *
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: SslManager-Cli-${{ matrix.rids }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build_tray:
+    name: Build Tray GUI
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Publish Tray Windows
+        run: dotnet publish SslManager.Tray/SslManager.Tray.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish/tray
+
+      - name: Zip Artifact
+        run: |
+          cd ./publish/tray
+          Compress-Archive -Path * -DestinationPath ../../SslManager-Tray-win-x64.zip
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: SslManager-Tray-win-x64.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

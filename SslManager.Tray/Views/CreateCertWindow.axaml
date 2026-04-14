@@ -1,0 +1,131 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SslManager.Tray.ViewModels"
+        x:Class="SslManager.Tray.Views.CreateCertWindow"
+        x:DataType="vm:CreateCertViewModel"
+        Title="SSL Manager — New Certificate"
+        Width="480" Height="460"
+        MinWidth="380" MinHeight="420"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False"
+        Background="#0F0F1A">
+
+    <Window.Styles>
+        <Style Selector="TextBlock.label">
+            <Setter Property="Foreground"  Value="#9090C0"/>
+            <Setter Property="FontSize"    Value="12"/>
+            <Setter Property="FontWeight"  Value="SemiBold"/>
+            <Setter Property="Margin"      Value="0 0 0 4"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background"   Value="#1A1A2E"/>
+            <Setter Property="Foreground"   Value="#E0E0F8"/>
+            <Setter Property="BorderBrush"  Value="#2A2A50"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding"      Value="10 8"/>
+            <Setter Property="FontSize"     Value="14"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#5555CC"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Background"   Value="#1A1A2E"/>
+            <Setter Property="Foreground"   Value="#E0E0F8"/>
+            <Setter Property="BorderBrush"  Value="#2A2A50"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding"      Value="10 6"/>
+        </Style>
+        <Style Selector="Slider">
+            <Setter Property="Foreground" Value="#5555CC"/>
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background"   Value="#4B4BCF"/>
+            <Setter Property="Foreground"   Value="White"/>
+            <Setter Property="Padding"      Value="0"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Cursor"       Value="Hand"/>
+            <Setter Property="FontSize"     Value="15"/>
+            <Setter Property="FontWeight"   Value="SemiBold"/>
+            <Setter Property="Height"       Value="44"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6060EE"/>
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ ContentPresenter">
+            <Setter Property="Background" Value="#2A2A50"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="28">
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0 0 0 20">
+            <TextBlock Text="➕  New Certificate" FontSize="20" FontWeight="Bold" Foreground="#A0A0FF"/>
+            <TextBlock Text="Generate a TLS cert for your local domain"
+                       FontSize="12" Foreground="#505070" Margin="0 4 0 0"/>
+        </StackPanel>
+
+        <!-- Form -->
+        <StackPanel Grid.Row="1" Spacing="14">
+
+            <!-- Domain -->
+            <StackPanel>
+                <TextBlock Classes="label" Text="PRIMARY DOMAIN *"/>
+                <TextBox Text="{Binding Domain}" PlaceholderText="e.g. myapp.local"/>
+            </StackPanel>
+
+            <!-- SANs -->
+            <StackPanel>
+                <TextBlock Classes="label" Text="SUBJECT ALT NAMES (comma-separated)"/>
+                <TextBox Text="{Binding Sans}" PlaceholderText="e.g. *.myapp.local, api.myapp.local"/>
+            </StackPanel>
+
+            <!-- Algorithm -->
+            <StackPanel>
+                <TextBlock Classes="label" Text="KEY ALGORITHM"/>
+                <ComboBox SelectedItem="{Binding Algorithm}" HorizontalAlignment="Stretch">
+                    <ComboBoxItem Content="RSA"/>
+                    <ComboBoxItem Content="ECDSA"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Days -->
+            <StackPanel>
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock Classes="label" Text="VALIDITY PERIOD" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding Days, StringFormat='{}{0} days'}"
+                               Foreground="#6060CC" FontWeight="SemiBold" FontSize="13"/>
+                </Grid>
+                <Slider Minimum="7" Maximum="3650"
+                        Value="{Binding Days}"
+                        TickFrequency="30"
+                        IsSnapToTickEnabled="False"/>
+            </StackPanel>
+
+            <!-- Status -->
+            <TextBlock Text="{Binding StatusMessage}"
+                       Foreground="#8080FF" FontSize="12"
+                       IsVisible="{Binding StatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <!-- Create Button -->
+        <Button Grid.Row="2"
+                Classes="primary"
+                Command="{Binding CreateCommand}"
+                HorizontalAlignment="Stretch"
+                IsEnabled="{Binding !IsBusy}"
+                Margin="0 20 0 0">
+            <Panel>
+                <TextBlock Text="Generate Certificate"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           IsVisible="{Binding !IsBusy}"/>
+                <TextBlock Text="Generating…"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           IsVisible="{Binding IsBusy}" Foreground="#8888CC"/>
+            </Panel>
+        </Button>
+
+    </Grid>
+</Window>

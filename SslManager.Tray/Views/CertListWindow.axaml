@@ -1,0 +1,118 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:SslManager.Tray.ViewModels"
+        x:Class="SslManager.Tray.Views.CertListWindow"
+        x:DataType="vm:CertListViewModel"
+        Title="SSL Manager — Certificates"
+        Width="900" Height="520"
+        MinWidth="700" MinHeight="380"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F0F1A">
+
+    <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#E0E0F0"/>
+        </Style>
+        <Style Selector="DataGrid">
+            <Setter Property="Background"           Value="#14141F"/>
+            <Setter Property="BorderBrush"          Value="#2A2A42"/>
+            <Setter Property="GridLinesVisibility"  Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#1E1E32"/>
+            <Setter Property="RowBackground"        Value="#14141F"/>
+        </Style>
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="Background"   Value="#1E1E38"/>
+            <Setter Property="Foreground"   Value="#9090C0"/>
+            <Setter Property="FontWeight"   Value="SemiBold"/>
+            <Setter Property="Padding"      Value="12 8"/>
+            <Setter Property="BorderBrush"  Value="#2A2A42"/>
+        </Style>
+        <Style Selector="DataGridCell">
+            <Setter Property="Foreground" Value="#D0D0F0"/>
+            <Setter Property="Padding"    Value="12 6"/>
+        </Style>
+        <Style Selector="Button.action">
+            <Setter Property="Background"   Value="#252540"/>
+            <Setter Property="Foreground"   Value="#A0A0D0"/>
+            <Setter Property="Padding"      Value="10 5"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor"       Value="Hand"/>
+        </Style>
+        <Style Selector="Button.action:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#32326A"/>
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background"   Value="#4B4BCF"/>
+            <Setter Property="Foreground"   Value="White"/>
+            <Setter Property="Padding"      Value="14 7"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor"       Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#6060EE"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0 0 0 16">
+            <TextBlock Text="🔒" FontSize="28" VerticalAlignment="Center"/>
+            <StackPanel>
+                <TextBlock Text="SSL Manager" FontSize="20" FontWeight="Bold" Foreground="#A0A0FF"/>
+                <TextBlock Text="Your local certificate registry"
+                           FontSize="12" Foreground="#606080"/>
+            </StackPanel>
+            <Border Width="1" Background="#2A2A42" Margin="8 4"/>
+            <Button Classes="action" Command="{Binding RefreshCommand}"
+                    VerticalAlignment="Center" ToolTip.Tip="Refresh">
+                ↺ Refresh
+            </Button>
+        </StackPanel>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Certificates}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  CornerRadius="8"
+                  x:Name="CertsGrid">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"        Binding="{Binding IdShort}"    Width="90"/>
+                <DataGridTextColumn Header="Domain"    Binding="{Binding Domain}"     Width="*" FontWeight="SemiBold"/>
+                <DataGridTextColumn Header="Algorithm" Binding="{Binding Algorithm}"  Width="90"/>
+                <DataGridTextColumn Header="Expires"   Binding="{Binding ExpiresAt}"  Width="110"/>
+                <DataGridTextColumn Header="Days Left" Binding="{Binding DaysLeft}"   Width="90"/>
+                <DataGridTextColumn Header="Trusted"   Binding="{Binding TrustedText}" Width="75"/>
+                <DataGridTextColumn Header="Status"    Binding="{Binding StatusText}" Width="90"/>
+                <DataGridTemplateColumn Header="Actions" Width="140">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Spacing="6" Margin="4 2">
+                                <Button Classes="action"
+                                        Command="{Binding $parent[DataGrid].DataContext.TrustCommand}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip.Tip="Trust this certificate"
+                                        FontSize="12">✓ Trust</Button>
+                                <Button Classes="action"
+                                        Command="{Binding $parent[DataGrid].DataContext.DeleteCommand}"
+                                        CommandParameter="{Binding}"
+                                        ToolTip.Tip="Delete this certificate"
+                                        FontSize="12">🗑</Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Footer -->
+        <TextBlock Grid.Row="2"
+                   Text="Tip: Run 'sslmgr trust --ca' in terminal to trust the Root CA system-wide."
+                   Foreground="#404060" FontSize="11" Margin="0 12 0 0"/>
+
+    </Grid>
+</Window>

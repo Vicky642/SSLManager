@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SslManager.Cli/SslManager.Cli.csproj" />
+  <Project Path="SslManager.Core/SslManager.Core.csproj" />
+  <Project Path="SslManager.Tray/SslManager.Tray.csproj" />
+</Solution>

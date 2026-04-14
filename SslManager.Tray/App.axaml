@@ -1,0 +1,37 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SslManager.Tray.ViewModels"
+             xmlns:local="using:SslManager.Tray"
+             x:Class="SslManager.Tray.App"
+             x:DataType="vm:TrayViewModel"
+             RequestedThemeVariant="Dark">
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    </Application.Styles>
+
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="/Assets/icon.ico"
+                      ToolTipText="SSL Manager"
+                      Command="{Binding ShowListCommand}">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="📋 List Certificates"  Command="{Binding ShowListCommand}" />
+                        <NativeMenuItem Header="➕ New Certificate"    Command="{Binding ShowCreateCommand}" />
+                        <NativeMenuItem Header="🔄 Renew Expiring"     Command="{Binding RenewExpiringCommand}" />
+                        <NativeMenuItem Header="📁 Open Cert Folder"   Command="{Binding OpenFolderCommand}" />
+                        <NativeMenuItemSeparator />
+                        <NativeMenuItem Header="❌ Exit"               Command="{Binding ExitCommand}" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+
+</Application>
