@@ -35,7 +35,7 @@ It features a beautiful **Command-Line Interface** (CLI) and an **Avalonia-power
 
 ## ⚡ Installation
 
-The easiest way to get SslManager is downloading the latest standalone executable from our [Releases Page](https://github.com/Vicky642/sslmanager/releases) for your OS.
+The easiest way to get SslManager is downloading the latest standalone executable from my [Releases Page](https://github.com/Vicky642/sslmanager/releases) for your OS.
 
 ### For .NET Developers
 Install it instantly as a global tool!
@@ -76,7 +76,7 @@ That's it!
 
 ## 🛠 Avalonia UI System Tray
 
-Don't want to use the terminal? We got you.
+Don't want to use the terminal? I got you.
 Launch `SslManager.Tray.exe` and enjoy managing your certs visually!
 
 - **Green Badges:** Certificates are tracked and healthy.
