@@ -1,6 +1,6 @@
 # Contributing to SslManager
 
-First, thank you for considering contributing to SslManager! We welcome PRs for bug fixes, new features, and documentation improvements.
+First, thank you for considering contributing to SslManager! I welcome PRs for bug fixes, new features, and documentation improvements.
 
 ## Development Setup
 
@@ -27,4 +27,4 @@ dotnet run --project SslManager.Tray
 
 ## Security
 
-If you discover a cryptographic vulnerability regarding how Root CAs or leaf certificates are parsed and injected, please DO NOT open a public issue. Email the repository owner privately.
+If you discover a cryptographic vulnerability regarding how Root CAs or leaf certificates are parsed and injected, please DO NOT open a public issue. Email ME privately via vickymuchiri64@gmail.com.
