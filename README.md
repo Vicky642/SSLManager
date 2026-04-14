@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=ff69b4&style=flat-square)](https://github.com/sponsors/Vicky642)
 
-<img src="https://via.placeholder.com/600x300.png?text=SslManager+CLI+and+Tray+App+Snapshot" alt="SslManager Demo" />
+
 <br/>
 
 *Stop wrestling with OpenSSL commands just to get the lock icon on localhost.*
